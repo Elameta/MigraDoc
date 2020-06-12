@@ -36,34 +36,20 @@ using MigraDoc.DocumentObjectModel.Visitors;
 
 namespace MigraDoc.DocumentObjectModel.Tables
 {
-    /// <summary>
-    /// Represents a table in a document.
-    /// </summary>
+    ///<summary> Represents a table in a document. </summary>
     public class Table : DocumentObject, IVisitable
     {
-        /// <summary>
-        /// Initializes a new instance of the Table class.
-        /// </summary>
-        public Table()
-        { }
+        ///<summary> Initializes a new instance of the Table class. </summary>
+        public Table() { }
 
-        /// <summary>
-        /// Initializes a new instance of the Table class with the specified parent.
-        /// </summary>
+        ///<summary> Initializes a new instance of the Table class with the specified parent. </summary>
         internal Table(DocumentObject parent) : base(parent) { }
 
         #region Methods
-        /// <summary>
-        /// Creates a deep copy of this object.
-        /// </summary>
-        public new Table Clone()
-        {
-            return (Table)DeepCopy();
-        }
+        ///<summary> Creates a deep copy of this object. </summary>
+        public new Table Clone() => (Table)DeepCopy();
 
-        /// <summary>
-        /// Implements the deep copy of the object.
-        /// </summary>
+        ///<summary> Implements the deep copy of the object. </summary>
         protected override object DeepCopy()
         {
             Table table = (Table)base.DeepCopy();
@@ -95,17 +81,10 @@ namespace MigraDoc.DocumentObjectModel.Tables
             return table;
         }
 
-        /// <summary>
-        /// Adds a new column to the table. Allowed only before any row was added.
-        /// </summary>
-        public Column AddColumn()
-        {
-            return Columns.AddColumn();
-        }
+        ///<summary> Adds a new column to the table. Allowed only before any row was added. </summary>
+        public Column AddColumn() => Columns.AddColumn();
 
-        /// <summary>
-        /// Adds a new column of the specified width to the table. Allowed only before any row was added.
-        /// </summary>
+        ///<summary> Adds a new column of the specified width to the table. Allowed only before any row was added. </summary>
         public Column AddColumn(Unit width)
         {
             Column clm = Columns.AddColumn();
@@ -113,57 +92,47 @@ namespace MigraDoc.DocumentObjectModel.Tables
             return clm;
         }
 
-        /// <summary>
-        /// Adds a new row to the table. Allowed only if at least one column was added.
-        /// </summary>
-        public Row AddRow()
-        {
-            return Rows.AddRow();
-        }
+        ///<summary> Adds a new row to the table. Allowed only if at least one column was added. </summary>
+        public Row AddRow() => Rows.AddRow();
 
-        /// <summary>
-        /// Returns true if no cell exists in the table.
-        /// </summary>
-        public bool IsEmpty
-        {
-            get { return Rows.Count == 0 || Columns.Count == 0; }
-        }
+        ///<summary> Returns true if no cell exists in the table. </summary>
+        public bool IsEmpty => Rows.Count == 0 || Columns.Count == 0;
 
-        /// <summary>
-        /// Sets a shading of the specified Color in the specified Tablerange.
-        /// </summary>
+        ///<summary> Sets a shading of the specified Color in the specified Tablerange. </summary>
         public void SetShading(int clm, int row, int clms, int rows, Color clr)
         {
             int rowsCount = _rows.Count;
             int clmsCount = _columns.Count;
 
             if (row < 0 || row >= rowsCount)
-                throw new ArgumentOutOfRangeException("row", "Invalid row index.");
+                throw new ArgumentOutOfRangeException(nameof(row), "Invalid row index.");
 
             if (clm < 0 || clm >= clmsCount)
-                throw new ArgumentOutOfRangeException("clm", "Invalid column index.");
+                throw new ArgumentOutOfRangeException(nameof(clm), "Invalid column index.");
 
             if (rows <= 0 || row + rows > rowsCount)
-                throw new ArgumentOutOfRangeException("rows", "Invalid row count.");
+                throw new ArgumentOutOfRangeException(nameof(rows), "Invalid row count.");
 
             if (clms <= 0 || clm + clms > clmsCount)
-                throw new ArgumentOutOfRangeException("clms", "Invalid column count.");
+                throw new ArgumentOutOfRangeException(nameof(clms), "Invalid column count.");
 
             int maxRow = row + rows - 1;
             int maxClm = clm + clms - 1;
             for (int r = row; r <= maxRow; r++)
             {
                 Row currentRow = _rows[r];
+
                 for (int c = clm; c <= maxClm; c++)
+                {
                     currentRow[c].Shading.Color = clr;
+                }
             }
         }
 
-        /// <summary>
-        /// Sets the borders surrounding the specified range of the table.
-        /// </summary>
-        public void SetEdge(int clm, int row, int clms, int rows,
-          Edge edge, BorderStyle style, Unit width, Color clr)
+        ///<summary> Sets the borders surrounding the specified range of the table. </summary>
+        public void SetEdge(
+            int clm, int row, int clms, int rows,
+            Edge edge, BorderStyle style, Unit width, Color clr)
         {
             Border border;
             int maxRow = row + rows - 1;
@@ -242,9 +211,7 @@ namespace MigraDoc.DocumentObjectModel.Tables
             }
         }
 
-        /// <summary>
-        /// Sets the borders surrounding the specified range of the table.
-        /// </summary>
+        ///<summary> Sets the borders surrounding the specified range of the table. </summary>
         public void SetEdge(int clm, int row, int clms, int rows, Edge edge, BorderStyle style, Unit width)
         {
             SetEdge(clm, row, clms, rows, edge, style, width, Color.Empty);
@@ -253,12 +220,10 @@ namespace MigraDoc.DocumentObjectModel.Tables
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets the Columns collection of the table.
-        /// </summary>
+        ///<summary> Gets or sets the Columns collection of the table. </summary>
         public Columns Columns
         {
-            get { return _columns ?? (_columns = new Columns(this)); }
+            get => _columns ?? (_columns = new Columns(this));
             set
             {
                 SetParent(value);
@@ -268,12 +233,10 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Columns _columns;
 
-        /// <summary>
-        /// Gets the Rows collection of the table.
-        /// </summary>
+        ///<summary> Gets the Rows collection of the table. </summary>
         public Rows Rows
         {
-            get { return _rows ?? (_rows = new Rows(this)); }
+            get => _rows ?? (_rows = new Rows(this));
             set
             {
                 SetParent(value);
@@ -283,23 +246,19 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Rows _rows;
 
-        /// <summary>
-        /// Sets or gets the default style name for all rows and columns of the table.
-        /// </summary>
+        ///<summary> Sets or gets the default style name for all rows and columns of the table. </summary>
         public string Style
         {
-            get { return _style.Value; }
-            set { _style.Value = value; }
+            get => _style.Value;
+            set => _style.Value = value;
         }
         [DV]
         internal NString _style = NString.NullValue;
 
-        /// <summary>
-        /// Gets the default ParagraphFormat for all rows and columns of the table.
-        /// </summary>
+        ///<summary> Gets the default ParagraphFormat for all rows and columns of the table. </summary>
         public ParagraphFormat Format
         {
-            get { return _format ?? (_format = new ParagraphFormat(this)); }
+            get => _format ?? (_format = new ParagraphFormat(this));
             set
             {
                 SetParent(value);
@@ -309,20 +268,16 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal ParagraphFormat _format;
 
-        /// <summary>
-        /// Gets or sets the default top padding for all cells of the table.
-        /// </summary>
+        ///<summary> Gets or sets the default top padding for all cells of the table. </summary>
         public Unit TopPadding
         {
-            get { return _topPadding; }
-            set { _topPadding = value; }
+            get => _topPadding;
+            set => _topPadding = value;
         }
         [DV]
         internal Unit _topPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the default bottom padding for all cells of the table.
-        /// </summary>
+        ///<summary> Gets or sets the default bottom padding for all cells of the table. </summary>
         public Unit BottomPadding
         {
             get { return _bottomPadding; }
@@ -331,34 +286,28 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Unit _bottomPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the default left padding for all cells of the table.
-        /// </summary>
+        /// <summary> Gets or sets the default left padding for all cells of the table. </summary>
         public Unit LeftPadding
         {
-            get { return _leftPadding; }
-            set { _leftPadding = value; }
+            get => _leftPadding;
+            set => _leftPadding = value;
         }
         [DV]
         internal Unit _leftPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the default right padding for all cells of the table.
-        /// </summary>
+        ///<summary> Gets or sets the default right padding for all cells of the table. </summary>
         public Unit RightPadding
         {
-            get { return _rightPadding; }
-            set { _rightPadding = value; }
+            get => _rightPadding;
+            set => _rightPadding = value;
         }
         [DV]
         internal Unit _rightPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets the default Borders object for all cells of the column.
-        /// </summary>
+        ///<summary> Gets the default Borders object for all cells of the column. </summary>
         public Borders Borders
         {
-            get { return _borders ?? (_borders = new Borders(this)); }
+            get => _borders ?? (_borders = new Borders(this));
             set
             {
                 SetParent(value);
@@ -368,12 +317,10 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Borders _borders;
 
-        /// <summary>
-        /// Gets the default Shading object for all cells of the column.
-        /// </summary>
+        ///<summary> Gets the default Shading object for all cells of the column. </summary>
         public Shading Shading
         {
-            get { return _shading ?? (_shading = new Shading(this)); }
+            get => _shading ?? (_shading = new Shading(this));
             set
             {
                 SetParent(value);
@@ -383,64 +330,56 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Shading _shading;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether
-        /// to keep all the table rows on the same page.
-        /// </summary>
+        ///<summary> Gets or sets a value indicating whether to keep all the table rows on the same page. </summary>
         public bool KeepTogether
         {
-            get { return _keepTogether.Value; }
-            set { _keepTogether.Value = value; }
+            get => _keepTogether.Value;
+            set => _keepTogether.Value = value;
         }
         [DV]
         internal NBool _keepTogether = NBool.NullValue;
 
-        /// <summary>
-        /// Gets or sets a comment associated with this object.
-        /// </summary>
+        ///<summary> Gets or sets a comment associated with this object. </summary>
         public string Comment
         {
-            get { return _comment.Value; }
-            set { _comment.Value = value; }
+            get => _comment.Value;
+            set => _comment.Value = value;
         }
         [DV]
         internal NString _comment = NString.NullValue;
         #endregion
 
         #region Internal
-        /// <summary>
-        /// Converts Table into DDL.
-        /// </summary>
+        ///<summary> Converts Table into DDL. </summary>
         internal override void Serialize(Serializer serializer)
         {
             serializer.WriteComment(_comment.Value);
-
             serializer.WriteLine("\\table");
 
             int pos = serializer.BeginAttributes();
 
-            if (_style.Value != String.Empty)
-                serializer.WriteSimpleAttribute("Style", Style);
+            if (_style.Value != string.Empty)
+                serializer.WriteSimpleAttribute(nameof(Style), Style);
 
-            if (!IsNull("Format"))
-                _format.Serialize(serializer, "Format", null);
+            if (!IsNull(nameof(Format)))
+                _format.Serialize(serializer, nameof(Format), null);
 
             if (!_topPadding.IsNull)
-                serializer.WriteSimpleAttribute("TopPadding", TopPadding);
+                serializer.WriteSimpleAttribute(nameof(TopPadding), TopPadding);
 
             if (!_leftPadding.IsNull)
-                serializer.WriteSimpleAttribute("LeftPadding", LeftPadding);
+                serializer.WriteSimpleAttribute(nameof(LeftPadding), LeftPadding);
 
             if (!_rightPadding.IsNull)
-                serializer.WriteSimpleAttribute("RightPadding", RightPadding);
+                serializer.WriteSimpleAttribute(nameof(RightPadding), RightPadding);
 
             if (!_bottomPadding.IsNull)
-                serializer.WriteSimpleAttribute("BottomPadding", BottomPadding);
+                serializer.WriteSimpleAttribute(nameof(BottomPadding), BottomPadding);
 
-            if (!IsNull("Borders"))
+            if (!IsNull(nameof(Borders)))
                 _borders.Serialize(serializer, null);
 
-            if (!IsNull("Shading"))
+            if (!IsNull(nameof(Shading)))
                 _shading.Serialize(serializer);
 
             serializer.EndAttributes(pos);
@@ -451,9 +390,7 @@ namespace MigraDoc.DocumentObjectModel.Tables
             serializer.EndContent();
         }
 
-        /// <summary>
-        /// Allows the visitor object to visit the document object and its child objects.
-        /// </summary>
+        ///<summary> Allows the visitor object to visit the document object and its child objects. </summary>
         void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
         {
             visitor.VisitTable(this);
@@ -462,21 +399,11 @@ namespace MigraDoc.DocumentObjectModel.Tables
             ((IVisitable)_rows).AcceptVisitor(visitor, visitChildren);
         }
 
-        /// <summary>
-        /// Gets the cell with the given row and column indices.
-        /// </summary>
-        public Cell this[int rwIdx, int clmIdx]
-        {
-            get { return Rows[rwIdx].Cells[clmIdx]; }
-        }
+        ///<summary> Gets the cell with the given row and column indices. </summary>
+        public Cell this[int rwIdx, int clmIdx] => Rows[rwIdx].Cells[clmIdx];
 
-        /// <summary>
-        /// Returns the meta object of this instance.
-        /// </summary>
-        internal override Meta Meta
-        {
-            get { return _meta ?? (_meta = new Meta(typeof(Table))); }
-        }
+        ///<summary> Returns the meta object of this instance. </summary>
+        internal override Meta Meta => _meta ?? (_meta = new Meta(typeof(Table)));
         static Meta _meta;
         #endregion
     }

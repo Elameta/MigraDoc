@@ -132,7 +132,7 @@ namespace MigraDoc.DocumentObjectModel.Visitors
 
             int cellIdx = BinarySearch(cell, new CellComparer());
             if (!(cellIdx >= 0 && cellIdx < Count))
-                throw new ArgumentException("cell is not a relevant cell", "cell");
+                throw new ArgumentException("cell is not a relevant cell", nameof(cell));
 
             if (cell._mergeRight > 0)
             {
@@ -145,11 +145,25 @@ namespace MigraDoc.DocumentObjectModel.Visitors
 
             if (cell._mergeDown > 0)
             {
+                if(cell.Table.Rows.Count <= cell.Row.Index + cell._mergeDown)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        nameof(cell.Table.Rows), 
+                        $"{nameof(Cell)}.{nameof(cell.MergeDown)} exceeded the row limit.\n\n" +
+                        $"         Row count: {cell.Table.Rows.Count}\n" +
+                        $"Required Row count: {cell.Row.Index + cell._mergeDown + 1} ([cell row index: {cell.Row.Index}] + [merge down: {cell.MergeDown}] + 1)\n");
+                }
+
                 Cell bottomBorderCell = cell.Table[cell.Row.Index + cell._mergeDown, cell.Column.Index];
+
                 if (bottomBorderCell._borders != null && bottomBorderCell._borders._bottom != null)
+                {
                     borders.Bottom = bottomBorderCell._borders._bottom.Clone();
+                }
                 else
+                {
                     borders._bottom = null;
+                }
             }
 
             // For BorderTypes Top, Right, Bottom and Left update the width with the neighbours touching border where required.

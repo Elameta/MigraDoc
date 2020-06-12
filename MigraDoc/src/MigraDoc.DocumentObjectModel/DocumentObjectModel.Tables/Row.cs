@@ -36,34 +36,20 @@ using MigraDoc.DocumentObjectModel.Visitors;
 
 namespace MigraDoc.DocumentObjectModel.Tables
 {
-    /// <summary>
-    /// Represents a row of a table.
-    /// </summary>
+    ///<summary> Represents a row of a table. </summary>
     public class Row : DocumentObject, IVisitable
     {
-        /// <summary>
-        /// Initializes a new instance of the Row class.
-        /// </summary>
-        public Row()
-        { }
+        ///<summary> Initializes a new instance of the Row class. </summary>
+        public Row() { }
 
-        /// <summary>
-        /// Initializes a new instance of the Row class with the specified parent.
-        /// </summary>
+        ///<summary> Initializes a new instance of the Row class with the specified parent. </summary>
         internal Row(DocumentObject parent) : base(parent) { }
 
         #region Methods
-        /// <summary>
-        /// Creates a deep copy of this object.
-        /// </summary>
-        public new Row Clone()
-        {
-            return (Row)DeepCopy();
-        }
+        ///<summary> Creates a deep copy of this object. </summary>
+        public new Row Clone() => (Row)DeepCopy();
 
-        /// <summary>
-        /// Implements the deep copy of the object.
-        /// </summary>
+        ///<summary> Implements the deep copy of the object. </summary>
         protected override object DeepCopy()
         {
             Row row = (Row)base.DeepCopy();
@@ -91,9 +77,7 @@ namespace MigraDoc.DocumentObjectModel.Tables
             return row;
         }
 
-        /// <summary>
-        /// Resets the cached values.
-        /// </summary>
+        ///<summary> Resets the cached values. </summary>
         internal override void ResetCachedValues()
         {
             base.ResetCachedValues();
@@ -103,27 +87,21 @@ namespace MigraDoc.DocumentObjectModel.Tables
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the table the row belongs to.
-        /// </summary>
+        ///<summary> Gets the table the row belongs to. </summary>
         public Table Table
         {
             get
             {
-                if (_table == null)
+                if (_table == null && Parent is Rows rws)
                 {
-                    Rows rws = Parent as Rows;
-                    if (rws != null)
-                        _table = rws.Table;
+                    _table = rws.Table;
                 }
                 return _table;
             }
         }
         Table _table;
 
-        /// <summary>
-        /// Gets the index of the row. First row has index 0.
-        /// </summary>
+        ///<summary> Gets the index of the row. First row has index 0. </summary>
         public int Index
         {
             get
@@ -143,31 +121,22 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal NInt index = NInt.NullValue;
 
-        /// <summary>
-        /// Gets a cell by its column index. The first cell has index 0.
-        /// </summary>
-        public Cell this[int index]
-        {
-            get { return Cells[index]; }
-        }
+        ///<summary> Gets a cell by its column index. The first cell has index 0. </summary>
+        public Cell this[int index] => Cells[index];
 
-        /// <summary>
-        /// Gets or sets the default style name for all cells of the row.
-        /// </summary>
+        ///<summary> Gets or sets the default style name for all cells of the row. </summary>
         public string Style
         {
-            get { return _style.Value; }
-            set { _style.Value = value; }
+            get => _style.Value;
+            set => _style.Value = value;
         }
         [DV]
         internal NString _style = NString.NullValue;
 
-        /// <summary>
-        /// Gets the default ParagraphFormat for all cells of the row.
-        /// </summary>
+        ///<summary> Gets the default ParagraphFormat for all cells of the row. </summary>
         public ParagraphFormat Format
         {
-            get { return _format ?? (_format = new ParagraphFormat(this)); }
+            get => _format ?? (_format = new ParagraphFormat(this));
             set
             {
                 SetParent(value);
@@ -177,78 +146,64 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal ParagraphFormat _format;
 
-        /// <summary>
-        /// Gets or sets the default vertical alignment for all cells of the row.
-        /// </summary>
+        ///<summary> Gets or sets the default vertical alignment for all cells of the row. </summary>
         public VerticalAlignment VerticalAlignment
         {
-            get { return (VerticalAlignment)_verticalAlignment.Value; }
-            set { _verticalAlignment.Value = (int)value; }
+            get => (VerticalAlignment)_verticalAlignment.Value;
+            set => _verticalAlignment.Value = (int)value;
         }
         [DV(Type = typeof(VerticalAlignment))]
         internal NEnum _verticalAlignment = NEnum.NullValue(typeof(VerticalAlignment));
 
-        /// <summary>
-        /// Gets or sets the height of the row.
-        /// </summary>
+        ///<summary> Gets or sets the height of the row. </summary>
         public Unit Height
         {
-            get { return _height; }
-            set { _height = value; }
+            get => _height;
+            set => _height = value;
         }
         [DV]
         internal Unit _height = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the rule which is used to determine the height of the row.
-        /// </summary>
+        ///<summary> Gets or sets the rule which is used to determine the height of the row. </summary>
         public RowHeightRule HeightRule
         {
-            get { return (RowHeightRule)_heightRule.Value; }
-            set { _heightRule.Value = (int)value; }
+            get => (RowHeightRule)_heightRule.Value;
+            set => _heightRule.Value = (int)value;
         }
         [DV(Type = typeof(RowHeightRule))]
         internal NEnum _heightRule = NEnum.NullValue(typeof(RowHeightRule));
 
-        /// <summary>
-        /// Gets or sets the default value for all cells of the row.
-        /// </summary>
+        ///<summary> Gets or sets the default value for all cells of the row. </summary>
         public Unit TopPadding
         {
-            get { return _topPadding; }
-            set { _topPadding = value; }
+            get => _topPadding;
+            set => _topPadding = value;
         }
         [DV]
         internal Unit _topPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the default value for all cells of the row.
-        /// </summary>
+        ///<summary> Gets or sets the default value for all cells of the row. </summary>
         public Unit BottomPadding
         {
-            get { return _bottomPadding; }
-            set { _bottomPadding = value; }
+            get => _bottomPadding;
+            set => _bottomPadding = value;
         }
         [DV]
         internal Unit _bottomPadding = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets a value which define whether the row is a header.
-        /// </summary>
+        ///<summary> Gets or sets a value which define whether the row is a header. </summary>
         public bool HeadingFormat
         {
-            get { return _headingFormat.Value; }
-            set { _headingFormat.Value = value; }
+            get => _headingFormat.Value;
+            set => _headingFormat.Value = value;
         }
         [DV]
         internal NBool _headingFormat = NBool.NullValue;
 
-        /// <summary>
-        /// Gets the default Borders object for all cells of the row.
-        /// </summary>
+        ///<summary> Gets the default Borders object for all cells of the row. </summary>
         public Borders Borders
         {
-            get { return _borders ?? (_borders = new Borders(this)); }
+            get => _borders ?? (_borders = new Borders(this));
             set
             {
                 SetParent(value);
@@ -258,12 +213,10 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Borders _borders;
 
-        /// <summary>
-        /// Gets the default Shading object for all cells of the row.
-        /// </summary>
+        ///<summary> Gets the default Shading object for all cells of the row. </summary>
         public Shading Shading
         {
-            get { return _shading ?? (_shading = new Shading(this)); }
+            get => _shading ?? (_shading = new Shading(this));
             set
             {
                 SetParent(value);
@@ -279,18 +232,16 @@ namespace MigraDoc.DocumentObjectModel.Tables
         /// </summary>
         public int KeepWith
         {
-            get { return _keepWith.Value; }
-            set { _keepWith.Value = value; }
+            get => _keepWith.Value;
+            set => _keepWith.Value = value;
         }
         [DV]
         internal NInt _keepWith = NInt.NullValue;
 
-        /// <summary>
-        /// Gets the Cells collection of the table.
-        /// </summary>
+        ///<summary> Gets the Cells collection of the table. </summary>
         public Cells Cells
         {
-            get { return _cells ?? (_cells = new Cells(this)); }
+            get => _cells ?? (_cells = new Cells(this));
             set
             {
                 SetParent(value);
@@ -300,22 +251,18 @@ namespace MigraDoc.DocumentObjectModel.Tables
         [DV]
         internal Cells _cells;
 
-        /// <summary>
-        /// Gets or sets a comment associated with this object.
-        /// </summary>
+        ///<summary> Gets or sets a comment associated with this object. </summary>
         public string Comment
         {
-            get { return _comment.Value; }
-            set { _comment.Value = value; }
+            get => _comment.Value;
+            set => _comment.Value = value;
         }
         [DV]
         internal NString _comment = NString.NullValue;
         #endregion
 
         #region Internal
-        /// <summary>
-        /// Converts Row into DDL.
-        /// </summary>
+        ///<summary> Converts Row into DDL. </summary>
         internal override void Serialize(Serializer serializer)
         {
             serializer.WriteComment(_comment.Value);
@@ -323,67 +270,63 @@ namespace MigraDoc.DocumentObjectModel.Tables
 
             int pos = serializer.BeginAttributes();
 
-            if (_style.Value != String.Empty)
-                serializer.WriteSimpleAttribute("Style", Style);
+            if (!string.IsNullOrEmpty(_style.Value))
+                serializer.WriteSimpleAttribute(nameof(Style), Style);
 
-            if (!IsNull("Format"))
-                _format.Serialize(serializer, "Format", null);
+            if (!IsNull(nameof(Format)))
+                _format.Serialize(serializer, nameof(Format), null);
 
             if (!_height.IsNull)
-                serializer.WriteSimpleAttribute("Height", Height);
+                serializer.WriteSimpleAttribute(nameof(Height), Height);
 
             if (!_heightRule.IsNull)
-                serializer.WriteSimpleAttribute("HeightRule", HeightRule);
+                serializer.WriteSimpleAttribute(nameof(HeightRule), HeightRule);
 
             if (!_topPadding.IsNull)
-                serializer.WriteSimpleAttribute("TopPadding", TopPadding);
+                serializer.WriteSimpleAttribute(nameof(TopPadding), TopPadding);
 
             if (!_bottomPadding.IsNull)
-                serializer.WriteSimpleAttribute("BottomPadding", BottomPadding);
+                serializer.WriteSimpleAttribute(nameof(BottomPadding), BottomPadding);
 
             if (!_headingFormat.IsNull)
-                serializer.WriteSimpleAttribute("HeadingFormat", HeadingFormat);
+                serializer.WriteSimpleAttribute(nameof(HeadingFormat), HeadingFormat);
 
             if (!_verticalAlignment.IsNull)
-                serializer.WriteSimpleAttribute("VerticalAlignment", VerticalAlignment);
+                serializer.WriteSimpleAttribute(nameof(VerticalAlignment), VerticalAlignment);
 
             if (!_keepWith.IsNull)
-                serializer.WriteSimpleAttribute("KeepWith", KeepWith);
+                serializer.WriteSimpleAttribute(nameof(KeepWith), KeepWith);
 
             //Borders & Shading
-            if (!IsNull("Borders"))
+            if (!IsNull(nameof(Borders)))
                 _borders.Serialize(serializer, null);
 
-            if (!IsNull("Shading"))
+            if (!IsNull(nameof(Shading)))
                 _shading.Serialize(serializer);
 
             serializer.EndAttributes(pos);
-
             serializer.BeginContent();
-            if (!IsNull("Cells"))
+
+            if (!IsNull(nameof(Cells)))
                 _cells.Serialize(serializer);
+            
             serializer.EndContent();
         }
 
-        /// <summary>
-        /// Allows the visitor object to visit the document object and its child objects.
-        /// </summary>
+        ///<summary> Allows the visitor object to visit the document object and its child objects. </summary>
         void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
         {
             visitor.VisitRow(this);
 
             foreach (Cell cell in _cells)
+            {
                 ((IVisitable)cell).AcceptVisitor(visitor, visitChildren);
+            }
         }
 
-        /// <summary>
-        /// Returns the meta object of this instance.
-        /// </summary>
-        internal override Meta Meta
-        {
-            get { return _meta ?? (_meta = new Meta(typeof(Row))); }
-        }
-        static Meta _meta;
+        ///<summary> Returns the meta object of this instance. </summary>
+        internal override Meta Meta => _meta ?? (_meta = new Meta(typeof(Row)));
+        private static Meta _meta;
         #endregion
     }
 }

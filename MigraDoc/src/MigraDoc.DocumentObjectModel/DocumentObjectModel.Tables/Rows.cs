@@ -36,38 +36,26 @@ using MigraDoc.DocumentObjectModel.Visitors;
 
 namespace MigraDoc.DocumentObjectModel.Tables
 {
-    /// <summary>
-    /// Represents the collection of all rows of a table.
-    /// </summary>
+    ///<summary> Represents the collection of all rows of a table. </summary>
     public class Rows : DocumentObjectCollection, IVisitable
     {
-        /// <summary>
-        /// Initializes a new instance of the Rows class.
-        /// </summary>
-        public Rows()
-        { }
+        ///<summary> Initializes a new instance of the Rows class. </summary>
+        public Rows() { }
 
-        /// <summary>
-        /// Initializes a new instance of the Rows class with the specified parent.
-        /// </summary>
+        ///<summary> Initializes a new instance of the Rows class with the specified parent. </summary>
         internal Rows(DocumentObject parent) : base(parent) { }
 
         #region Methods
-        /// <summary>
-        /// Creates a deep copy of this object.
-        /// </summary>
-        public new Rows Clone()
-        {
-            return (Rows)base.DeepCopy();
-        }
+        ///<summary> Creates a deep copy of this object. </summary>
+        public new Rows Clone() => (Rows)base.DeepCopy();
 
-        /// <summary>
-        /// Adds a new row to the rows collection. Allowed only if at least one column exists.
-        /// </summary>
+        ///<summary> Adds a new row to the rows collection. Allowed only if at least one column exists. </summary>
         public Row AddRow()
         {
             if (Table.Columns.Count == 0)
+            {
                 throw new InvalidOperationException("Cannot add row, because no columns exists.");
+            }
 
             Row row = new Row();
             Add(row);
@@ -76,29 +64,17 @@ namespace MigraDoc.DocumentObjectModel.Tables
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets the table the rows collection belongs to.
-        /// </summary>
-        public Table Table
-        {
-            get { return _parent as Table; }
-        }
+        ///<summary> Gets the table the rows collection belongs to. </summary>
+        public Table Table => _parent as Table;
 
-        /// <summary>
-        /// Gets a row by its index.
-        /// </summary>
-        public new Row this[int index]
-        {
-            get { return base[index] as Row; }
-        }
+        ///<summary> Gets a row by its index. </summary>
+        public new Row this[int index] => base[index] as Row;
 
-        /// <summary>
-        /// Gets or sets the row alignment of the table.
-        /// </summary>
+        ///<summary> Gets or sets the row alignment of the table. </summary>
         public RowAlignment Alignment
         {
-            get { return (RowAlignment)_alignment.Value; }
-            set { _alignment.Value = (int)value; }
+            get => (RowAlignment)_alignment.Value;
+            set => _alignment.Value = (int)value;
         }
         [DV(Type = typeof(RowAlignment))]
         internal NEnum _alignment = NEnum.NullValue(typeof(RowAlignment));
@@ -109,61 +85,51 @@ namespace MigraDoc.DocumentObjectModel.Tables
         /// </summary>
         public Unit LeftIndent
         {
-            get { return _leftIndent; }
-            set { _leftIndent = value; }
+            get => _leftIndent;
+            set => _leftIndent = value;
         }
         [DV]
         internal Unit _leftIndent = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the default vertical alignment for all rows.
-        /// </summary>
+        ///<summary> Gets or sets the default vertical alignment for all rows. </summary>
         public VerticalAlignment VerticalAlignment
         {
-            get { return (VerticalAlignment)_verticalAlignment.Value; }
-            set { _verticalAlignment.Value = (int)value; }
+            get => (VerticalAlignment)_verticalAlignment.Value;
+            set => _verticalAlignment.Value = (int)value;
         }
         [DV(Type = typeof(VerticalAlignment))]
         internal NEnum _verticalAlignment = NEnum.NullValue(typeof(VerticalAlignment));
 
-        /// <summary>
-        /// Gets or sets the height of the rows.
-        /// </summary>
+        ///<summary> Gets or sets the height of the rows. </summary>
         public Unit Height
         {
-            get { return _height; }
-            set { _height = value; }
+            get => _height;
+            set => _height = value;
         }
         [DV]
         internal Unit _height = Unit.NullValue;
 
-        /// <summary>
-        /// Gets or sets the rule which is used to determine the height of the rows.
-        /// </summary>
+        ///<summary> Gets or sets the rule which is used to determine the height of the rows. </summary>
         public RowHeightRule HeightRule
         {
-            get { return (RowHeightRule)_heightRule.Value; }
-            set { _heightRule.Value = (int)value; }
+            get => (RowHeightRule)_heightRule.Value;
+            set => _heightRule.Value = (int)value;
         }
         [DV(Type = typeof(RowHeightRule))]
         internal NEnum _heightRule = NEnum.NullValue(typeof(RowHeightRule));
 
-        /// <summary>
-        /// Gets or sets a comment associated with this object.
-        /// </summary>
+        ///<summary> Gets or sets a comment associated with this object. </summary>
         public string Comment
         {
-            get { return _comment.Value; }
-            set { _comment.Value = value; }
+            get => _comment.Value;
+            set => _comment.Value = value;
         }
         [DV]
         internal NString _comment = NString.NullValue;
         #endregion
 
         #region Internal
-        /// <summary>
-        /// Converts Rows into DDL.
-        /// </summary>
+        ///<summary> Converts Rows into DDL. </summary>
         internal override void Serialize(Serializer serializer)
         {
             serializer.WriteComment(_comment.Value);
@@ -172,53 +138,54 @@ namespace MigraDoc.DocumentObjectModel.Tables
             int pos = serializer.BeginAttributes();
 
             if (!_alignment.IsNull)
-                serializer.WriteSimpleAttribute("Alignment", Alignment);
+                serializer.WriteSimpleAttribute(nameof(Alignment), Alignment);
 
             if (!_height.IsNull)
-                serializer.WriteSimpleAttribute("Height", Height);
+                serializer.WriteSimpleAttribute(nameof(Height), Height);
 
             if (!_heightRule.IsNull)
-                serializer.WriteSimpleAttribute("HeightRule", HeightRule);
+                serializer.WriteSimpleAttribute(nameof(HeightRule), HeightRule);
 
             if (!_leftIndent.IsNull)
-                serializer.WriteSimpleAttribute("LeftIndent", LeftIndent);
+                serializer.WriteSimpleAttribute(nameof(LeftIndent), LeftIndent);
 
             if (!_verticalAlignment.IsNull)
-                serializer.WriteSimpleAttribute("VerticalAlignment", VerticalAlignment);
+                serializer.WriteSimpleAttribute(nameof(VerticalAlignment), VerticalAlignment);
 
             serializer.EndAttributes(pos);
-
             serializer.BeginContent();
+            
             int rows = Count;
             if (rows > 0)
             {
                 for (int row = 0; row < rows; row++)
+                {
                     this[row].Serialize(serializer);
+                }
             }
             else
+            {
                 serializer.WriteComment("Invalid - no rows defined. Table will not render.");
+            }
             serializer.EndContent();
         }
 
-        /// <summary>
-        /// Allows the visitor object to visit the document object and its child objects.
-        /// </summary>
+        ///<summary> Allows the visitor object to visit the document object and its child objects. </summary>
         void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
         {
             visitor.VisitRows(this);
 
             foreach (Row row in this)
+            {
                 ((IVisitable)row).AcceptVisitor(visitor, visitChildren);
+            }
         }
 
-        /// <summary>
-        /// Returns the meta object of this instance.
-        /// </summary>
-        internal override Meta Meta
-        {
-            get { return _meta ?? (_meta = new Meta(typeof(Rows))); }
-        }
-        static Meta _meta;
+        ///<summary> Returns the meta object of this instance. </summary>
+        internal override Meta Meta => 
+            _meta ?? (_meta = new Meta(typeof(Rows)));
+        
+        private static Meta _meta;
         #endregion
     }
 }
